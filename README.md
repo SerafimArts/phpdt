@@ -1,8 +1,10 @@
-# DT language
+# DT Language for PHP
 
 > Please note that this is just an experiment for now
 
 DT (DataType) language for PHP autocompetition and static analysis tools.
+
+- See also: [DT Specification](spec/00-specification-for-dt.md)
 
 The task of the language is to implement a full-fledged strictly typed language
 for the implementation of autocomplete, static analysis rules and similar tasks.
