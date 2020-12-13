@@ -1,5 +1,7 @@
 # DT language
 
+> Please note that this is just an experiment for now
+
 DT (DataType) language for PHP autocompetition and static analysis tools.
 
 The task of the language is to implement a full-fledged strictly typed language
