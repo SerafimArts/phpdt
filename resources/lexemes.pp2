@@ -1,0 +1,65 @@
+
+// Literals
+
+%token  T_HEREDOC               <<<\h*(\w+)[\s\S]*?\n\h*\g{-1}
+%token  T_NOWDOC                <<<\h*\'(\w+)\'[\s\S]*?\n\h*\g{-1}
+%token  T_INTERPOLATE_STRING    "([^"\\]*(?:\\.[^"\\]*)*)"
+%token  T_STRING                \'([^\'\\]*(?:\\.[^\'\\]*)*)\'
+%token  T_HEX_NUMBER            0x[0-9a-fA-F]+(?:[eE][\+\-]?[0-9]+)?
+%token  T_OCT_NUMBER            0[0-9]+(?:[eE][\+\-]?[0-9]+)?
+%token  T_FLOAT_NUMBER          ([0-9]*\.[0-9]+|[0-9]+\.[0-9]*)(?:[eE][\+\-]?[0-9]+)?
+%token  T_INT_NUMBER            (?:0|[1-9][0-9]*)(?:[eE][\+\-]?[0-9]+)?
+
+// Punctuation
+
+%token  T_NS                    \\
+
+%token  T_SEMICOLON             ;
+%token  T_DOUBLE_COLON          ::
+%token  T_COLON                 :
+%token  T_COMMA                 ,
+%token  T_QUESTION_MARK         \?
+%token  T_AND                   &
+%token  T_OR                    \|
+%token  T_ASSIGN                =
+
+%token  T_ANGLE_LEFT            <
+%token  T_ANGLE_RIGHT           >
+
+%token  T_PARENTHESIS_OPEN      \(
+%token  T_PARENTHESIS_CLOSE     \)
+
+%token  T_BRACKET_OPEN          \[
+%token  T_BRACKET_CLOSE         \]
+
+%token  T_BRACE_OPEN            {
+%token  T_BRACE_CLOSE           }
+
+// Keywords
+
+%token  T_VARIABLE              \$[a-zA-Z_\x7f-\xff][a-zA-Z0-9_\x7f-\xff]*
+
+%token  T_TYPE                  \btype\b
+
+%token  T_FUNCTION              \bfunction\b
+%token  T_INTERFACE             \binterface\b
+%token  T_CLASS                 \bclass\b
+%token  T_TRAIT                 \btrait\b
+
+%token  T_PUBLIC                \bpublic\b
+%token  T_PROTECTED             \bprotected\b
+%token  T_PRIVATE               \bprivate\b
+%token  T_INTERNAL              \binternal\b
+%token  T_VIRTUAL               \bvirtual\b
+%token  T_STATIC                \bstatic\b
+
+%token  T_OUT                   \bout\b
+%token  T_IN                    \bin\b
+
+%token  T_NAME                  [a-zA-Z_\x7f-\xff][a-zA-Z0-9_\x7f-\xff\-]*
+
+// Skip
+
+%skip   T_COMMENT               (//|#)[^\n]*\n
+%skip   T_DOC_COMMENT           /\*.*?\*/
+%skip   T_WHITESPACE            (\xfe\xff|\x20|\x09|\x0a|\x0d)+

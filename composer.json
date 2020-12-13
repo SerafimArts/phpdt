@@ -1,0 +1,38 @@
+{
+    "name": "phpdt/parser",
+    "license": "MIT",
+    "type": "library",
+    "description": "Data types and static analysis tool for PHP",
+    "require": {
+        "php": ">=7.4",
+        "phplrt/runtime": "^3.1"
+    },
+    "autoload": {
+        "psr-4": {
+            "DataTypes\\Parser\\": "src"
+        }
+    },
+    "require-dev": {
+        "vimeo/psalm": "^4.3",
+        "nikic/php-parser": "^4.10",
+        "phplrt/phplrt": "^3.1",
+        "jetbrains/phpstorm-attributes": "^1.0",
+        "phpunit/phpunit": "^9.0",
+        "roave/security-advisories": "dev-master",
+        "symfony/var-dumper": "^5.0"
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "DataTypes\\Parser\\Tests\\": "tests"
+        }
+    },
+    "extra": {
+        "branch-alias": {
+            "dev-master": "1.0.x-dev"
+        }
+    },
+    "scripts": {
+    },
+    "minimum-stability": "dev",
+    "prefer-stable": true
+}

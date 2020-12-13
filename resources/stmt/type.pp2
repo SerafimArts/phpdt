@@ -1,0 +1,19 @@
+
+#TypeStatement -> {
+    return new Ast\Stmt\TypeStatement(
+        $children[0],
+        $children[1],
+        $children[2]
+    );
+}
+  : TypeStatementDefinition()
+    // = X | Y
+    ::T_ASSIGN:: TypeExpression()
+    // ;
+    ::T_SEMICOLON::
+  ;
+
+// type X<Arg>
+TypeStatementDefinition
+  : ::T_TYPE:: Identifier() OptionalGenericParameters()
+  ;

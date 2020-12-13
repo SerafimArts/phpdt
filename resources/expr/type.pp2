@@ -1,0 +1,64 @@
+
+#Type
+  : TypeExpression()
+  ;
+
+// Expression
+
+TypeExpression
+    : TypeAndExpression()
+    ;
+
+TypeAndExpression -> {
+    if (\count($children) === 2) {
+        return new Ast\Expr\AndExpression($children[0], $children[1]);
+    }
+
+    return $children;
+}
+  : TypeOrExpression()
+    (
+      ::T_AND:: TypeAndExpression()
+    )?
+  ;
+
+TypeOrExpression -> {
+    if (\count($children) === 2) {
+        return new Ast\Expr\OrExpression($children[0], $children[1]);
+    }
+
+    return $children;
+}
+  : TypePrimaryExpression()
+    (
+      ::T_OR:: TypeOrExpression()
+    )?
+  ;
+
+TypePrimaryExpression
+    : ::T_PARENTHESIS_OPEN:: Type() ::T_PARENTHESIS_CLOSE::
+    | TypeArgument()
+    ;
+
+// Argument
+
+TypeArgument -> {
+    return new Ast\Expr\TypeArgument(
+        \array_shift($children),
+        $children
+    );
+}
+    : Name() TypeGenericArguments()?
+    ;
+
+TypeGenericArguments
+    : ::T_ANGLE_LEFT::
+      TypeGenericArgument() (
+          ::T_COMMA:: TypeGenericArgument()
+      )*
+      ::T_ANGLE_RIGHT::
+    ;
+
+TypeGenericArgument
+    : TypeExpression()
+    ;

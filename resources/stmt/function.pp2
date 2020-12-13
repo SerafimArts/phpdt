@@ -1,0 +1,74 @@
+
+#FunctionStatement -> {
+    $modifier = array_shift($children);
+
+    $result = array_shift($children);
+    $result->modifier = $modifier;
+
+    return $result;
+}
+  : OptionalFunctionModifiers()
+    FunctionLikeStatement()
+  ;
+
+OptionalFunctionModifiers -> {
+    if ($children === []) {
+        return 0;
+    }
+
+    switch ($children->getName()) {
+        case 'T_INTERNAL':
+            return Ast\Stmt\FunctionStatement::IS_INTERNAL;
+
+        case 'IS_VIRTUAL':
+            return Ast\Stmt\FunctionStatement::IS_VIRTUAL;
+
+        default:
+            return 0;
+    }
+}
+  : FunctionModifiers()?
+  ;
+
+FunctionModifiers
+  : <T_INTERNAL>
+  | <T_VIRTUAL>
+  ;
+
+//
+
+FunctionLikeStatement -> {
+    return new Ast\Stmt\FunctionStatement(
+        array_shift($children),
+        array_pop($children),
+        $children[0],
+        $children[1]
+    );
+}
+  : ::T_FUNCTION::?
+      StatementIdentifier()
+      ::T_PARENTHESIS_OPEN::
+        OptionalFunctionParameters()
+      ::T_PARENTHESIS_CLOSE::
+      FunctionReturnType()
+    ::T_SEMICOLON::
+  ;
+
+
+FunctionReturnType -> { return reset($children); }
+  : ::T_COLON:: Type()
+  ;
+
+OptionalFunctionParameters -> { return new \ArrayObject($children ?? []); }
+    : FunctionParameters()?
+    ;
+
+FunctionParameters
+  : FunctionParameter() (
+      ::T_COMMA:: FunctionParameter()
+    )*
+  ;
+
+FunctionParameter -> { return new Ast\Stmt\FunctionParameter(...$children); }
+  : Variable() ::T_COLON:: Type()
+  ;

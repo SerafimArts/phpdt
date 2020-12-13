@@ -1,0 +1,65 @@
+
+#ClassLikeStatement -> {
+    $class = array_shift($children);
+
+    $result = new $class(
+        array_shift($children),
+        array_shift($children),
+        array_shift($children)
+    );
+
+    if (isset($children[0])) {
+        foreach ($children[0] as $member) {
+            if ($member instanceof Ast\Stmt\MethodStatement) {
+                $result->methods[] = $member;
+                continue;
+            }
+
+            if ($member instanceof Ast\Stmt\PropertyStatement) {
+                $result->properties[] = $member;
+                continue;
+            }
+        }
+    }
+
+    return $result;
+}
+  : ClassStatement()
+  | InterfaceStatement()
+  | TraitStatement()
+  ;
+
+// class X<Y>: Parent
+ClassStatement -> { return [Ast\Stmt\ClassStatement::class, ...$children]; }
+  : ::T_CLASS:: StatementIdentifier() OptionalClassParents()
+    (ClassLikeBody() | ::T_SEMICOLON::)
+  ;
+
+// interface X<Y>: Parent
+InterfaceStatement -> { return [Ast\Stmt\InterfaceStatement::class, ...$children]; }
+  : ::T_INTERFACE:: StatementIdentifier() OptionalClassParents()
+    (ClassLikeBody() | ::T_SEMICOLON::)
+  ;
+
+// trait X<Y>: Parent
+TraitStatement -> { return [Ast\Stmt\TraitStatement::class, ...$children]; }
+  : ::T_TRAIT:: StatementIdentifier()
+    (ClassLikeBody() | ::T_SEMICOLON::)
+  ;
+
+// : Parent<X>, Parent2<Y>
+OptionalClassParents -> { return new ArrayObject($children ?? []); }
+  : ClassParents()?
+  ;
+
+ClassParents
+  : ::T_COLON:: TypeArgument() (::T_COMMA:: TypeArgument())*
+  ;
+
+// { ... }
+ClassLikeBody -> { return new ArrayObject($children); }
+  : ::T_BRACE_OPEN::
+        MethodStatement()*
+    ::T_BRACE_CLOSE::
+  ;
+

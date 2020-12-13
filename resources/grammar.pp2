@@ -1,0 +1,24 @@
+
+%include lexemes
+%include name
+%include generic
+
+%include expr/type
+
+%include stmt/class-like
+%include stmt/method
+%include stmt/function
+%include stmt/type
+
+%pragma  root Document
+
+
+#Document
+  : Definition()*
+  ;
+
+#Definition
+  : ClassLikeStatement()
+  | FunctionStatement()
+  | TypeStatement()
+  ;

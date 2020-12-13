@@ -1,0 +1,54 @@
+
+#MethodStatement -> {
+    $modifiers = 0;
+
+    while(count($children) > 1) {
+        $modifiers |= array_shift($children);
+    }
+
+    return new Ast\Stmt\MethodStatement(end($children), $modifiers);
+}
+  : MethodModifiers() FunctionLikeStatement()
+  ;
+
+
+MethodModifiers -> {
+    return array_reduce($children, fn($carry, $i) => $carry |= $i, 0);
+}
+  : (MethodModifier() | MethodStaticModifier())*
+  ;
+
+
+MethodStaticModifier -> {
+    return count($children) === 1
+        ? Ast\Stmt\MethodStatement::IS_STATIC
+        : Ast\Stmt\MethodStatement::IS_OPT_STATIC;
+}
+  : <T_STATIC> <T_QUESTION_MARK>?
+  ;
+
+
+MethodModifier -> {
+    switch($children->getName()) {
+        case 'T_PRIVATE':
+            return Ast\Stmt\MethodStatement::IS_PRIVATE;
+
+        case 'T_PROTECTED':
+            return Ast\Stmt\MethodStatement::IS_PROTECTED;
+
+        case 'T_VIRTUAL':
+            return Ast\Stmt\MethodStatement::IS_VIRTUAL;
+
+        case 'T_INTERNAL':
+            return Ast\Stmt\MethodStatement::IS_INTERNAL;
+
+        default:
+            return Ast\Stmt\MethodStatement::IS_PUBLIC;
+    }
+}
+  : <T_PUBLIC>
+  | <T_PROTECTED>
+  | <T_PRIVATE>
+  | <T_VIRTUAL>
+  | <T_INTERNAL>
+  ;

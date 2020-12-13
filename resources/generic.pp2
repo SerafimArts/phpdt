@@ -1,0 +1,44 @@
+
+// Usage
+
+OptionalGenericParameters -> { return new \ArrayObject($children ?? []); }
+  : GenericParameters()?
+  ;
+
+GenericParameters
+  : ::T_ANGLE_LEFT::
+    GenericParameter() (
+        ::T_COMMA:: GenericParameter()
+    )*
+    ::T_ANGLE_RIGHT::
+  ;
+
+GenericParameter -> {
+    return new Ast\Stmt\GenericParameter(
+        $children[1],
+        $children[0],
+        $children[2] ?? null
+    );
+}
+  : OptionalGenericParameterVariance()
+    Identifier()
+    // instance of
+    (::T_COLON:: Type())?
+  ;
+
+OptionalGenericParameterVariance -> {
+    return is_int($children) ? $children : Ast\Stmt\GenericParameter::VARIANCE_ANY;
+}
+  : GenericParameterVariance()?
+  ;
+
+GenericParameterVariance -> {
+    if ($children->getName() === 'T_IN') {
+        return Ast\Stmt\GenericParameter::VARIANCE_IN;
+    }
+
+    return Ast\Stmt\GenericParameter::VARIANCE_OUT;
+}
+  : <T_IN>
+  | <T_OUT>
+  ;

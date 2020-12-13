@@ -1,0 +1,46 @@
+
+Keyword
+  // Definition Prefix
+  : <T_TYPE>
+  | <T_FUNCTION>
+  | <T_INTERFACE>
+  | <T_CLASS>
+  | <T_TRAIT>
+  // Generic Declaration-Site Variance
+  | <T_OUT>
+  | <T_IN>
+  // Visibility Modifiers
+  | <T_PUBLIC>
+  | <T_PROTECTED>
+  | <T_PRIVATE>
+  // Other Modifiers
+  | <T_STATIC>
+  | <T_INTERNAL>
+  | <T_VIRTUAL>
+  ;
+
+StatementIdentifier
+  : Identifier() OptionalGenericParameters()
+  ;
+
+Variable -> { return new Ast\Identifier(substr($children->getValue(), 1)); }
+  : <T_VARIABLE>
+  ;
+
+Identifier -> { return new Ast\Identifier($children->getValue()); }
+  : Keyword()
+  | <T_NAME>
+  ;
+
+Name
+  : FullyQualifiedName()
+  | RelativeName()
+  ;
+
+FullyQualifiedName -> { return new Ast\Name($children, true); }
+  : ::T_NS:: Identifier() (::T_NS:: Identifier())*
+  ;
+
+RelativeName -> { return new Ast\Name($children, false); }
+  : Identifier() (::T_NS:: Identifier())*
+  ;
