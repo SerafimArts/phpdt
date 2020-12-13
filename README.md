@@ -60,9 +60,7 @@ PHP does not allow to declare signatures for anonymous functions. The DT system
 allows you to bypass these restrictions:
 
 ```php
-virtual type array-filter-callback<in TValue, in TKey: array-key> =
-    callable(TValue, TKey): bool
-;
+virtual function array-filter-callback(mixed, array-key): bool;
 
 function array_filter(
     $array: array,
