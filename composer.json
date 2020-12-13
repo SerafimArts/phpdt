@@ -2,7 +2,7 @@
     "name": "phpdt/parser",
     "license": "MIT",
     "type": "library",
-    "description": "Data types and static analysis tool for PHP",
+    "description": "DataType language for PHP static analysis tools",
     "require": {
         "php": ">=7.4",
         "phplrt/runtime": "^3.1"

@@ -1,6 +1,6 @@
 # PHP Data Types
 
-Data types and static analysis tool for PHP
+DataType language for PHP static analysis tools
 
 ## Requirements
 
