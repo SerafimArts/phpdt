@@ -15,3 +15,4 @@ on the PHP specification.
 - [Conformance](02-conformance.md)
 - [Terms And Definitions](03-terms-and-definitions.md)
 - [Overview](04-overview.md)
+- [Grammar](05-grammar.md)
